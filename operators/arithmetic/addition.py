@@ -38,3 +38,14 @@ finally:
 
 mystring = str1 + " " + str(x+y) # 5+1 = 6
 print(mystring)
+
+
+# lists
+
+alist = [3, 5]
+
+mylist = alist + alist
+print(mylist)
+
+mylist = [x + 10 for x in alist]
+print(mylist)
