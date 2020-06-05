@@ -22,3 +22,17 @@ print(my_list)
 my_list = [(chr(97+num), num) for num in range(4)] #chr(65+num) for capital letters (A,B,C...)
 #my_list = [(chr(945+num), num) for num in range(4)] #chr(65+num) for capital letters (A,B,C...)
 print(my_list)
+
+
+# Nested lists
+
+alist = ["Hello", "What", 5]
+
+mylist = [[x] for x in alist] # [['Hello'], ['What'], [5]]
+print(mylist)
+
+mylist = [alist*2 for x in range(2)] # [['Hello', 'What', 5, 'Hello', 'What', 5], ['Hello', 'What', 5, 'Hello', 'What', 5]]
+print(mylist)
+
+mylist = [[alist[x]*3] for x in range(alist.__len__())] # [['HelloHelloHello'], ['WhatWhatWhat'], [15]]
+print(mylist)
