@@ -36,3 +36,12 @@ print(mylist)
 
 mylist = [[alist[x]*3] for x in range(alist.__len__())] # [['HelloHelloHello'], ['WhatWhatWhat'], [15]]
 print(mylist)
+
+
+# if/else
+
+alist = [x for x in range(1, 21)]
+print(alist)
+
+mylist = [x*10 if x <= 10 else x*2 for x in alist]
+print(mylist)
