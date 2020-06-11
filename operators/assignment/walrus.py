@@ -8,6 +8,11 @@ if (n := len(alist)) > 3:
 
 print(n) # is defined globally
 
+#check if last item in range
+for i in range(mx := len(alist)):
+    if i == mx-1:
+        print("Last iteration!")
+
 # From: https://www.python.org/dev/peps/pep-0572/#syntax-and-semantics
 
 # Handle a matched regex
