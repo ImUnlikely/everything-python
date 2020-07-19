@@ -103,10 +103,13 @@ def h(p1, p2):
     return abs(x1 - x2) + abs(y1 - y2)
 
 def reconstruct_path(came_from, current, draw):
+    global path_length
+    path_length = 0
     while current in came_from:
         current = came_from[current]
         current.make_path()
         draw()
+        path_length += 1
 
 def a_star_algorithm(draw, grid, start, end):
     count = 0
@@ -235,16 +238,30 @@ def main(win, width, height, ROWS, COLS):
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE and start and end:
+                    print("Finding path...")
                     for row in grid:
                         for node in row:
                             node.update_nieghbors(grid)
 
-                    a_star_algorithm(lambda: draw(win, grid, ROWS, COLS, width, height), grid, start, end)
+                    result = a_star_algorithm(lambda: draw(win, grid, ROWS, COLS, width, height), grid, start, end)
+                    if result == False:
+                        print("Unable to find path")
+                    else:
+                        print(f"Found path of length {path_length}")
 
                 if event.key == pygame.K_c:
+                    print("Board cleared!")
                     start = None
                     end = None
                     grid = make_grid(ROWS, COLS, width, height)
+
+                if event.key == pygame.K_r:
+                    print("Reset path")
+                    for row in grid:
+                        for node in row:
+                            if node.color == RED or node.color == GREEN or node.color == PURPLE:
+                                node.reset()
+                            node.draw(win)
 
     pygame.quit()
 
