@@ -97,7 +97,7 @@ class Node:
             self.neighbors.append(grid[self.row - 1][self.col])
 
         if self.col > 0 and not grid[self.row][self.col - 1].is_barrier(): # left
-                    self.neighbors.append(grid[self.row][self.col - 1])
+            self.neighbors.append(grid[self.row][self.col - 1])
 
         if self.col < self.total_columns - 1 and not grid[self.row][self.col + 1].is_barrier(): # right
             self.neighbors.append(grid[self.row][self.col + 1])
