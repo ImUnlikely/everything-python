@@ -1,6 +1,7 @@
 import pygame
 import math
 from queue import PriorityQueue
+import clipboard
 
 WIDTH = 1000
 HEIGHT = 600
@@ -12,10 +13,10 @@ pygame.display.set_caption("A* Path Finding Algorithm")
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
-YELLOW = (255, 255, 0)
+# YELLOW = (255, 255, 0)
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
-PURPLE = (128, 0, 128)
+# PURPLE = (128, 0, 128)
 ORANGE = (255, 165, 0)
 GREY = (128, 128, 128)
 TURQUOISE = (64, 224, 208)
@@ -31,6 +32,7 @@ class Node:
         self.total_rows = total_rows
         self.total_columns = total_columns
         self.color = WHITE
+        self.c = "W"
         self.neighbors = []
 
     def get_pos(self):
@@ -49,28 +51,35 @@ class Node:
         return self.color == ORANGE
 
     def is_end(self):
-        return self.color == TURQUOISE
+        return self.color == BLUE
 
     def reset(self):
         self.color = WHITE
+        self.c = "W"
 
     def make_start(self):
         self.color = ORANGE
+        self.c = "O"
 
     def make_closed(self):
         self.color = RED
+        self.c = "R"
 
     def make_open(self):
         self.color = GREEN
+        self.c = "G"
 
     def make_barrier(self):
         self.color = BLACK
+        self.c = "B"
 
     def make_end(self):
-        self.color = TURQUOISE
+        self.color = BLUE
+        self.c = "b"
 
     def make_path(self):
-        self.color = PURPLE
+        self.color = TURQUOISE
+        self.c = "T"
 
     def draw(self, win):
         pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.height))
@@ -237,7 +246,7 @@ def main(win, width, height, ROWS, COLS):
                     end = None
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE and start and end:
+                if event.key == pygame.K_SPACE and start and end: # start pathfinding
                     print("Finding path...")
                     for row in grid:
                         for node in row:
@@ -249,19 +258,60 @@ def main(win, width, height, ROWS, COLS):
                     else:
                         print(f"Found path of length {path_length}")
 
-                if event.key == pygame.K_c:
+                if event.key == pygame.K_c: # clear board entirely
                     print("Board cleared!")
                     start = None
                     end = None
                     grid = make_grid(ROWS, COLS, width, height)
 
-                if event.key == pygame.K_r:
+                if event.key == pygame.K_r: # reset path
                     print("Reset path")
                     for row in grid:
                         for node in row:
-                            if node.color == RED or node.color == GREEN or node.color == PURPLE:
+                            if node.color == RED or node.color == GREEN or node.color == TURQUOISE:
                                 node.reset()
                             node.draw(win)
+
+                if event.key == pygame.K_s: # save as string
+                    board = ""
+                    for i in grid:
+                        for j in i:
+                            board += j.c
+                    clipboard.copy(board)
+                    print("Board copied to clipboard")
+
+                if event.key == pygame.K_i: # import string
+                    # some check here to see that the string is correct
+                    data = clipboard.paste()
+                    if len(data) != COLS*ROWS:
+                        print("Invalid string")
+                        break
+
+                    start = None
+                    end = None
+
+                    for i in range(len(grid)):
+                        for j in range(len(grid[i])):
+                            state = data[i*COLS + j]
+                            if state == "W":
+                                grid[i][j].reset()
+                            elif state == "O":
+                                start = grid[i][j]
+                                start.make_start()
+                            elif state == "R":
+                                grid[i][j].make_closed()
+                            elif state == "G":
+                                grid[i][j].make_open()
+                            elif state == "B":
+                                grid[i][j].make_barrier()
+                            elif state == "b":
+                                end = grid[i][j]
+                                end.make_end()
+                            elif state == "T":
+                                grid[i][j].make_path()
+                            else:
+                                raise ValueError(f"Expected W, O, R, G, B, T or b, got '{state}'")
+                            
 
     pygame.quit()
 
