@@ -12,6 +12,8 @@ pygame.display.set_caption("A* Path Finding Algorithm")
 
 # user settings
 do_draw = True
+saves_path = r"C:\Users\Thoma\Desktop\Code\Repositories\everything-python\pathfinding\saves\save_astar.txt"
+
 
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
@@ -277,13 +279,19 @@ def main(win, width, height, ROWS, COLS):
                                 node.reset()
                             node.draw(win)
 
-                if event.key == pygame.K_s: # save as string
+                if event.key == pygame.K_s: # save to file
                     board = ""
                     for i in grid:
                         for j in i:
                             board += j.c
-                    clipboard.copy(board)
-                    print("Board copied to clipboard")
+
+                    save_name = input(">>>Save name: ")
+                    board = save_name + ":" + board + "\n"
+                    file = open(saves_path, "a")
+                    file.write(board)
+                    file.close()
+                    print(f"Board written to savefile ({saves_path})")
+
 
                 if event.key == pygame.K_i: # import string
                     # some check here to see that the string is correct
