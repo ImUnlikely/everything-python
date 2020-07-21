@@ -10,6 +10,9 @@ ROWS = 60
 WIN = pygame.display.set_mode([WIDTH, HEIGHT])
 pygame.display.set_caption("A* Path Finding Algorithm")
 
+# user settings
+do_draw = True
+
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
@@ -159,7 +162,8 @@ def a_star_algorithm(draw, grid, start, end):
                     open_set_hash.add(neighbor)
                     neighbor.make_open()
 
-        draw() # comment this line to disable visualization. Makes it WAY faster when disabled
+        if do_draw == True:
+            draw()
 
         if current != start:
             current.make_closed()
@@ -214,6 +218,8 @@ def main(win, width, height, ROWS, COLS):
     end = None
     run = True
 
+    global do_draw
+
     while run:
         draw(win, grid, ROWS, COLS, width, height)
         for event in pygame.event.get():
@@ -251,7 +257,6 @@ def main(win, width, height, ROWS, COLS):
                     for row in grid:
                         for node in row:
                             node.update_nieghbors(grid)
-
                     result = a_star_algorithm(lambda: draw(win, grid, ROWS, COLS, width, height), grid, start, end)
                     if result == False:
                         print("Unable to find path")
@@ -311,6 +316,15 @@ def main(win, width, height, ROWS, COLS):
                                 grid[i][j].make_path()
                             else:
                                 raise ValueError(f"Expected W, O, R, G, B, T or b, got '{state}'")
+
+                if event.key == pygame.K_RETURN:
+                    user_input = input(">>>")
+                    if user_input == "draw 0":
+                        do_draw = False
+                        print("Draw set to False")
+                    elif user_input == "draw 1":
+                        do_draw = True
+                        print("Draw set to True")
                             
 
     pygame.quit()
