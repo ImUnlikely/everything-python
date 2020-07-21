@@ -292,10 +292,21 @@ def main(win, width, height, ROWS, COLS):
                     file.close()
                     print(f"Board written to savefile ({saves_path})")
 
+                if event.key == pygame.K_i: # import from file
+                    file = open(saves_path, "r")
+                    saves = file.readlines()
+                    save_names = []
+                    for save in saves:
+                        save_names.append(save.split(":")[0])
+                    print(f"Saves: {save_names}")
+                    save_choice = input(">>>Choose save: ")
+                    try:
+                        data = saves[save_names.index(save_choice)].split(":")[1]
+                        data = data[:-1]
+                    except ValueError:
+                        print("Save name not in list")
+                        break
 
-                if event.key == pygame.K_i: # import string
-                    # some check here to see that the string is correct
-                    data = clipboard.paste()
                     if len(data) != COLS*ROWS:
                         print("Invalid string")
                         break
