@@ -1,7 +1,6 @@
 import pygame
 import math
 from queue import PriorityQueue
-import clipboard
 
 WIDTH = 1000
 HEIGHT = 600
