@@ -150,7 +150,7 @@ def a_star_algorithm(draw, grid, start, end):
                     open_set_hash.add(neighbor)
                     neighbor.make_open()
 
-        draw()
+        draw() # comment this line to disable visualization. Makes it WAY faster when commented
 
         if current != start:
             current.make_closed()
