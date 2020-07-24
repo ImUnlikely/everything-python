@@ -212,6 +212,17 @@ def get_clicked_pos(pos, rows, columns, width, height):
     # print(row, col)
     return row, col
 
+def yes_no_prompt(prompt):
+    while True:
+        answer = input(prompt)
+        if type(answer) != str:
+            print("Input must be a string")
+    
+        elif answer.lower() == "y":
+            return True
+        elif answer.lower() == "n":
+            return False
+
 def main(win, width, height, ROWS, COLS):
     grid = make_grid(ROWS, COLS, width, height)
 
@@ -284,12 +295,35 @@ def main(win, width, height, ROWS, COLS):
                         for j in i:
                             board += j.c
 
-                    save_name = input(">>>Save name: ")
-                    board = save_name + ":" + board + "\n"
-                    file = open(saves_path, "a")
-                    file.write(board)
+                    file = open(saves_path, "r")
+                    saves = file.readlines()
+                    save_names = []
+                    for save in saves:
+                        save_names.append(save.split(":")[0])
                     file.close()
-                    print(f"Board written to savefile ({saves_path})")
+
+                    while True:
+                        save_name = input(">>>Save name: ")
+                        if save_name not in save_names:
+                            board = save_name + ":" + board + "\n"
+                            file = open(saves_path, "a")
+                            file.write(board)
+                            file.close()
+                            print(f"Board written to savefile ({saves_path})")
+                            break
+
+                        elif save_name in save_names:
+                            override = yes_no_prompt(f"Save with name '{save_name}' already exists. Do you want to override? [Y/N]: ")
+                            if override == True:
+                                file = open(saves_path, "w")
+                                board = save_name + ":" + board + "\n"
+                                saves[save_names.index(save_name)] = board
+                                file.writelines(saves)
+                                file.close()
+                                print(f"Save '{save_name}' overwritten")
+                                break
+                            else:
+                                break
 
                 if event.key == pygame.K_i: # import from file
                     file = open(saves_path, "r")
@@ -343,10 +377,23 @@ def main(win, width, height, ROWS, COLS):
                     elif user_input == "draw 1":
                         do_draw = True
                         print("Draw set to True")
+
+                    elif user_input == "saves":
+                        file = open(saves_path, "r")
+                        saves = file.readlines()
+                        save_names = []
+                        for save in saves:
+                            save_names.append(save.split(":")[0])
+                        file.close()
+                        print(save_names)
+                    
+                    elif user_input.lower() == "help":
+                        print("commands:")
+                        print("draw 0/1 - disable or enable visualization for live pathfinding")
+                        print("saves - print all savenames")
                             
 
     pygame.quit()
 
 
 main(WIN, WIDTH, HEIGHT, ROWS, COLS)
-
