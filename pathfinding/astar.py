@@ -378,7 +378,7 @@ def main(win, width, height, ROWS, COLS):
                     elif user_input == "draw 1":
                         do_draw = True
                         print("Draw set to True")
-                        
+
                     elif user_input == "saves":
                         file = open(saves_path, "r")
                         saves = file.readlines()
@@ -387,6 +387,11 @@ def main(win, width, height, ROWS, COLS):
                             save_names.append(save.split(":")[0])
                         file.close()
                         print(save_names)
+                    
+                    elif user_input.lower() == "help":
+                        print("commands:")
+                        print("draw 0/1 - disable or enable visualization for live pathfinding")
+                        print("saves - print all savenames")
                             
 
     pygame.quit()
