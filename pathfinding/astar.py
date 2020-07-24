@@ -378,6 +378,15 @@ def main(win, width, height, ROWS, COLS):
                     elif user_input == "draw 1":
                         do_draw = True
                         print("Draw set to True")
+                        
+                    elif user_input == "saves":
+                        file = open(saves_path, "r")
+                        saves = file.readlines()
+                        save_names = []
+                        for save in saves:
+                            save_names.append(save.split(":")[0])
+                        file.close()
+                        print(save_names)
                             
 
     pygame.quit()
