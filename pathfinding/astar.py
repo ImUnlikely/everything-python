@@ -398,4 +398,3 @@ def main(win, width, height, ROWS, COLS):
 
 
 main(WIN, WIDTH, HEIGHT, ROWS, COLS)
-
